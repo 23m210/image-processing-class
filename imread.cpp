@@ -18,6 +18,7 @@ int main(int argc, char *argv[]) {
     for (int x = 0; x < image.cols; ++x) {
       int val = image.data[y * image.cols + x];
       val /= 2;
+
       image.data[y * image.cols + x] = val;
     }
   }
