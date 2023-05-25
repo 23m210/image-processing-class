@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
 
       cv::merge(ycrcb, image);
 
-  cv::cvtColor(image, image, cv::COLOR_Ycrcb2BGR);
+  cv::cvtColor(image, image, cv::COLOR_YCrCb2BGR);
   cv::imshow("image", image);
   cv::waitKey();
   cv::destroyAllWindows();

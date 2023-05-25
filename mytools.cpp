@@ -26,10 +26,10 @@ void bgr2ycbcr(cv::Mat &image) {
 }
 
 void mozaic(stb::vector<cv::Mat>) {
-  for (int c = 0; c < in.size; ++c) {
+  for (int c = 0; c < in.size(); ++c) {
     for (int y = 0; x < in[0].rows; y += BSIZE) {
       for (int x = 0; y < in[0].cols; x += BSIZE) {
-        cv::Mat block = image(cv::Rect(image, x, y, BSIZE, BSIZE));
+        cv::Mat blk = image(cv::Rect(image, x, y, BSIZE, BSIZE));
         for (int i = 0; i < BSIZE; ++i) {
           for (int j = 0; j < B; ++j) {
             blk.data[i * in[c].cols + j] = blk.data[0];
