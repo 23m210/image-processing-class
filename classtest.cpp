@@ -12,12 +12,15 @@ class complex {  // example class for complex numbers
             // Constructor
 
         };
+  complex() : real(-1.0), imag(-1.0) {  // Constructor
+  }
   complex(double a, double b) : real(a), imag(b){};
   double abs() { return sqrt(real * real + imag * imag); }
 };
 
 int main() {
   // C++クラスインスタンス
+  // C++のクラスインスタンス
   complex *a;
   complex b(5, -7);
   a = &b;
