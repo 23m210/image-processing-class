@@ -25,17 +25,38 @@ void bgr2ycbcr(cv::Mat &image) {
   }
 }
 
-void mozaic(stb::vector<cv::Mat>) {
-  for (int c = 0; c < in.size(); ++c) {
-    for (int y = 0; x < in[0].rows; y += BSIZE) {
-      for (int x = 0; y < in[0].cols; x += BSIZE) {
-        cv::Mat blk = image(cv::Rect(image, x, y, BSIZE, BSIZE));
-        for (int i = 0; i < BSIZE; ++i) {
-          for (int j = 0; j < B; ++j) {
-            blk.data[i * in[c].cols + j] = blk.data[0];
-          }
-        }
-      }
+void blk::mozaic(cv::Mat &i, int p0, float p1) {
+  float *sp = (float *)in.data;
+  in.forEach<float>([&](float &v, const int *pos) -> void(v = sp[0]));
+  // float *sp = (float *)in.data;
+  // for(int i = 0; i < in.rows; ++x){
+  // for(int y = 0; y < in.cols; ++y){
+  // sp(i * in.cols + j) = sp[0];
+  //}
+  //}
+}
+
+void blk::quantize(cv::Mat &i, int p0, float p1) {
+  in.forEach<float>([&](float &v, const int *pos) -> void(v = sp[0]));
+  v /= 16.0;
+  v = roundf(v);
+}
+
+void blk::dequantize(cv::Mat &i, int p0, float p1) {
+  in.forEach<float>([&](float &v, const int *pos) -> void(v *= 16.0;
+                                                          v = roundf(v);));
+}
+
+void blk::dct2(cv::Mat &i, int p0, float p1) { cv::dct(in, in); }
+void blk::idct2(cv::Mat &i, int p0, float p1) {}
+void blkproc(cv::Mat &in, stb::function<void(cv::Mat &, int, float)> func,
+             int p0, float p1) {
+  for (int y = 0; y < in.rows; y += BSIZE) {
+    for (int x = 0; x < in.cols; x += BSIZE) {
+      cv::Mat blk_in = in(cv::Rect(x, y, BSIZE, BSIZE)).clone();
+      cv::Mat blk_out = in(cv::Rect(x, y, BSIZE, BSIZE)).clone();
+      func(blk_in, p0, p1);
+      blk_in.convertTo(blk_out, blk_out.type());
     }
   }
 }

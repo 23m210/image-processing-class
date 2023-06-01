@@ -17,16 +17,28 @@ int main(int argc, char *argv[]) {
     printf("Image file is not found.\n");
     return EXIT_FAILURE;
   }
-  bgr2ycbcr(image);
+  bgr2ycrcb(image);
 
   stb::vector<cv::Mat> ycrcb;
   cv::split(image, ycrcb);
 
-  mozaic()
+  for (int c = 0; c < image.channels(); ++c) {
+    cv::Mat buf;
+    ycrcb[c].convertTo(buf, CV_32F);
 
-      cv::merge(ycrcb, image);
+    blkproc(buf, blk::dct2);
+    blkproc(buf, blk::quantize);
 
-  cv::cvtColor(image, image, cv::COLOR_YCrCb2BGR);
+    // decoder
+    blkproc(buf, blk::dequantize);
+    blkproc(buf, blk::idct2);
+
+    buf.convertTo(ycrcb[c], ycrcb[c].type());
+  }
+
+  cv::merge(ycrcb, image);
+
+  cv::cvtColor(image, image);
   cv::imshow("image", image);
   cv::waitKey();
   cv::destroyAllWindows();
