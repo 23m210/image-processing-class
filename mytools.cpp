@@ -12,20 +12,20 @@ void bgr2ycbcr(cv::Mat &image) {
   printf("width = %d, height = %d", WIDTH, HEIGHT);
   for (int y = 0; y < HEIGHT; ++y) {
     for (int x = 0; x < WIDTH; ++x, p0 += NC, p1 += NC, p2 += NC) {
-      int pB = *p0, pG = *p1, pR = *p2;
+      int B = *p0, G = p1, R = p2;
 
       double Y = 0.299 * R + 0.587 * G + 0.144 * B;
       double Cb = -.1687 * R + -0.3313 * G + 0.5 * B;
       double Cr = 0.5 * R + -0.4187 * G + -0.0813 * B;
 
       *p0 = static_cast<uchar>(roundl(Y));
-      *p1 = static_cast<uchar>(roundl(Cr));
-      *p2 = static_cast<uchar>(roundl(Cb));
+      p1 = static_cast<uchar>(roundl(Cr));
+      p2 = static_cast<uchar>(roundl(Cb));
     }
   }
 }
 
-void blk::mozaic(cv::Mat &i, int p0, float p1) {
+void blk::mozaic(cv::Mat &in, int p0, float p1) {
   float *sp = (float *)in.data;
   in.forEach<float>([&](float &v, const int *pos) -> void(v = sp[0]));
   // float *sp = (float *)in.data;
@@ -36,19 +36,18 @@ void blk::mozaic(cv::Mat &i, int p0, float p1) {
   //}
 }
 
-void blk::quantize(cv::Mat &i, int p0, float p1) {
-  in.forEach<float>([&](float &v, const int *pos) -> void(v = sp[0]));
-  v /= 16.0;
-  v = roundf(v);
+void blk::quantize(cv::Mat &in, int p0, float p1) {
+  in.forEach<float>([&](float &v, const int *pos) -> void(v /= 16.0;
+                                                          v = roundf(v);));
 }
 
-void blk::dequantize(cv::Mat &i, int p0, float p1) {
+void blk::dequantize(cv::Mat &in, int p0, float p1) {
   in.forEach<float>([&](float &v, const int *pos) -> void(v *= 16.0;
                                                           v = roundf(v);));
 }
 
-void blk::dct2(cv::Mat &i, int p0, float p1) { cv::dct(in, in); }
-void blk::idct2(cv::Mat &i, int p0, float p1) {}
+void blk::dct2(cv::Mat &in, int p0, float p1) { cv::dct(in, in); }
+void blk::idct2(cv::Mat &in, int p0, float p1) {}
 void blkproc(cv::Mat &in, stb::function<void(cv::Mat &, int, float)> func,
              int p0, float p1) {
   for (int y = 0; y < in.rows; y += BSIZE) {

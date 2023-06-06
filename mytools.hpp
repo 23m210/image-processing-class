@@ -6,7 +6,7 @@
 
 void bgr2ycbcr(cv::Mat &image);
 
-void blkproc(cv::Mat &, stb::function<void(cv::Mat &, int, float)>, int = 0,
+void blkproc(cv::Mat &in, stb::function<void(cv::Mat &, int, float)>, int = 0,
              float = 0.0F);
 
 namespace blk {
