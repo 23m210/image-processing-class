@@ -29,11 +29,11 @@ void blk::mozaic(cv::Mat &in, int p0, float p1) {
   float *sp = (float *)in.data;
   in.forEach<float>([&](float &v, const int *pos) -> void(v = sp[0]));
   // float *sp = (float *)in.data;
-  // for(int i = 0; i < in.rows; ++x){
-  // for(int y = 0; y < in.cols; ++y){
-  // sp(i * in.cols + j) = sp[0];
-  //}
-  //}
+  // for (int i = 0; i < in.rows; ++x) {
+  //   for (int y = 0; y < in.cols; ++y) {
+  //     sp(i * in.cols + j) = sp[0];
+  //   }
+  // }
 }
 
 void blk::quantize(cv::Mat &in, int p0, float p1) {
@@ -42,13 +42,13 @@ void blk::quantize(cv::Mat &in, int p0, float p1) {
 }
 
 void blk::dequantize(cv::Mat &in, int p0, float p1) {
-  in.forEach<float>([&](float &v, const int *pos) -> void(v *= 16.0;
-                                                          v = roundf(v);));
+  in.forEach<float>([&](float &v,
+                        const int *pos) -> void(v *= 16.0 v = roundf(v)));
 }
 
 void blk::dct2(cv::Mat &in, int p0, float p1) { cv::dct(in, in); }
 void blk::idct2(cv::Mat &in, int p0, float p1) {}
-void blkproc(cv::Mat &in, stb::function<void(cv::Mat &, int, float)> func,
+void blkproc(cv::Mat &in, std::function<void(cv::Mat &, int, float)> func,
              int p0, float p1) {
   for (int y = 0; y < in.rows; y += BSIZE) {
     for (int x = 0; x < in.cols; x += BSIZE) {

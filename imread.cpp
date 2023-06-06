@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
   }
   bgr2ycrcb(image);
 
-  stb::vector<cv::Mat> ycrcb;
+  std::vector<cv::Mat> ycrcb;
   cv::split(image, ycrcb);
 
   for (int c = 0; c < image.channels(); ++c) {
