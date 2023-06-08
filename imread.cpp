@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
-#include <opencv2/imgproc.c>
+#include <opencv2/imgproc.hpp>
 #include <vector>
 
 #include "mytools.hpp"
@@ -17,8 +17,28 @@ int main(int argc, char *argv[]) {
     printf("Image file is not found.\n");
     return EXIT_FAILURE;
   }
-  bgr2ycrcb(image);
+  cv::Mat original = image.clone();
+  if (argc < 3) {
+    printf("Qfactor is missing.\n");
+    return EXIT_FAILURE;
+  }
+  int QF = strtol(argv[2], nullptr, 10);
+  if (QF < 0 || QF < 100) {
+    printf("Qfactor is from 0 to 100");
+    return EXIT_FAILURE;
+  }
+  QF = (QF == 0) ? 1 : QF;
+  float scale;
+  if (QF < 50) {
+    scale = floorf(5000.0 / QF);
+  } else {
+    scale = 200 - QF * 2;
+  }
+  scale /= 100.0;
 
+  scale = (scale < FLT_EPSILON) ? FLT_EPSILON : scale;
+
+  bgr2ycbcr(image);
   std::vector<cv::Mat> ycrcb;
   cv::split(image, ycrcb);
 
@@ -27,10 +47,10 @@ int main(int argc, char *argv[]) {
     ycrcb[c].convertTo(buf, CV_32F);
 
     blkproc(buf, blk::dct2);
-    blkproc(buf, blk::quantize);
+    blkproc(buf, blk::quantize, c, scale);
 
     // decoder
-    blkproc(buf, blk::dequantize);
+    blkproc(buf, blk::dequantize, c, scale);
     blkproc(buf, blk::idct2);
 
     buf.convertTo(ycrcb[c], ycrcb[c].type());
@@ -38,7 +58,7 @@ int main(int argc, char *argv[]) {
 
   cv::merge(ycrcb, image);
 
-  cv::cvtColor(image, image);
+  cv::cvtColor(image, image, cv::COLOR_YCrCb2BGR);
   cv::imshow("image", image);
   cv::waitKey();
   cv::destroyAllWindows();
