@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
 
   scale = (scale < FLT_EPSILON) ? FLT_EPSILON : scale;
 
-  bgr2ycbcr(image);
+  bgr2ycrcb(image);
   std::vector<cv::Mat> ycrcb;
   cv::split(image, ycrcb);
 

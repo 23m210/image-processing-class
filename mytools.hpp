@@ -4,7 +4,7 @@
 
 #define BSIZE 16
 
-void bgr2ycbcr(cv::Mat &image);
+void bgr2ycrcb(cv::Mat &image);
 
 void blkproc(cv::Mat &in, std::function<void(cv::Mat &, int, float)>, int = 0,
              float = 0.0F);
