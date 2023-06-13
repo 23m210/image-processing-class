@@ -6,13 +6,8 @@ class complex {  // example class for complex numbers
   double real;  // real part
   double imag;  // imaginary part
  public:
-  complex()
-      : real(-1.0),
-        imag(-1.0){
-            // Constructor
-
-        };
-  complex() : real(-1.0), imag(-1.0) {  // Constructor
+  complex() : real(-1.0), imag(-1.0) {
+    // Constructor
   }
   complex(double a, double b) : real(a), imag(b){};
   double abs() { return sqrt(real * real + imag * imag); }

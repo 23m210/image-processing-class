@@ -19,8 +19,8 @@ void bgr2ycrcb(cv::Mat &image) {
       double Cr = 0.5 * R + -0.4187 * G + -0.0813 * B;
 
       *p0 = static_cast<uchar>(roundl(Y));
-      *p1 = static_cast<uchar>(roundl(Cr / 2));
-      *p2 = static_cast<uchar>(roundl(Cb / 2));
+      *p1 = static_cast<uchar>(roundl(Cr));
+      *p2 = static_cast<uchar>(roundl(Cb));
     }
   }
 }
