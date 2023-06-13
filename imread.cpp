@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
   }
   int QF = strtol(argv[2], nullptr, 10);
   if (QF < 0 || QF < 100) {
-    printf("Qfactor is from 0 to 100");
+    printf("Valid range for Qfactor is from 0 to 100");
     return EXIT_FAILURE;
   }
   QF = (QF == 0) ? 1 : QF;
@@ -46,6 +46,7 @@ int main(int argc, char *argv[]) {
     cv::Mat buf;
     ycrcb[c].convertTo(buf, CV_32F);
 
+    // encoder
     blkproc(buf, blk::dct2);
     blkproc(buf, blk::quantize, c, scale);
 
