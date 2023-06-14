@@ -15,8 +15,8 @@ void bgr2ycrcb(cv::Mat &image) {
       int B = *p0, G = *p1, R = *p2;
 
       double Y = 0.299 * R + 0.587 * G + 0.144 * B;
-      double Cb = -.1687 * R + -0.3313 * G + 0.5 * B;
-      double Cr = 0.5 * R + -0.4187 * G + -0.0813 * B;
+      double Cb = -.1687 * R + -0.3313 * G + 0.5 * B + 128;
+      double Cr = 0.5 * R + -0.4187 * G + -0.0813 * B + 128;
 
       *p0 = static_cast<uchar>(roundl(Y));
       *p1 = static_cast<uchar>(roundl(Cr));
@@ -61,7 +61,7 @@ void blkproc(cv::Mat &in, std::function<void(cv::Mat &, int, float)> func,
   for (int y = 0; y < in.rows; y += BSIZE) {
     for (int x = 0; x < in.cols; x += BSIZE) {
       cv::Mat blk_in = in(cv::Rect(x, y, BSIZE, BSIZE)).clone();
-      cv::Mat blk_out = in(cv::Rect(x, y, BSIZE, BSIZE)).clone();
+      cv::Mat blk_out = in(cv::Rect(x, y, BSIZE, BSIZE));
       func(blk_in, p0, p1);
       blk_in.convertTo(blk_out, blk_out.type());
     }

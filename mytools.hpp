@@ -2,7 +2,7 @@
 #include <functional>
 #include <opencv2/core.hpp>
 
-#define BSIZE 16
+#define BSIZE 8
 
 void bgr2ycrcb(cv::Mat &image);
 

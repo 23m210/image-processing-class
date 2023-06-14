@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
     return EXIT_FAILURE;
   }
   int QF = strtol(argv[2], nullptr, 10);
-  if (QF < 0 || QF < 100) {
+  if (QF < 0 || QF > 100) {
     printf("Valid range for Qfactor is from 0 to 100");
     return EXIT_FAILURE;
   }
