@@ -36,13 +36,17 @@ int main(int argc, char *argv[]) {
   }
   scale /= 100.0;
 
-  scale = (scale < FLT_EPSILON) ? FLT_EPSILON : scale;
+  scale = (scale < FLT_EPSILON) ? -1.0 : scale;
 
   bgr2ycrcb(image);
   std::vector<cv::Mat> ycrcb;
   cv::split(image, ycrcb);
 
+  constexpr float D = 2;
   for (int c = 0; c < image.channels(); ++c) {
+    if (c > 0) {
+      cv::resize(ycrcb[c], ycrcb[c], cv::Size(), D, D, cv::INTER_AREA);
+    }
     cv::Mat buf;
     ycrcb[c].convertTo(buf, CV_32F);
 
@@ -55,11 +59,20 @@ int main(int argc, char *argv[]) {
     blkproc(buf, blk::idct2);
 
     buf.convertTo(ycrcb[c], ycrcb[c].type());
+    if (c > 0) {
+      cv::resize(ycrcb[c], ycrcb[c], cv::Size(), 1 / 0.5, 1 / 0.5,
+                 cv::INTER_AREA);
+    }
   }
 
   cv::merge(ycrcb, image);
 
   cv::cvtColor(image, image, cv::COLOR_YCrCb2BGR);
+
+  // PSNR計算を行う
+  //
+  // OpenCv quality psnr 検索
+
   cv::imshow("image", image);
   cv::waitKey();
   cv::destroyAllWindows();
