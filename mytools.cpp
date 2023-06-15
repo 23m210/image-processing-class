@@ -37,6 +37,9 @@ void blk::mozaic(cv::Mat &in, int p0, float p1) {
 }
 
 void blk::quantize(cv::Mat &in, int c, float scale) {
+  if (scale < 0.0) {
+    return;
+  }
   in.forEach<float>([&](float &v, const int *pos) -> void {
     float stepsize = blk::qmatrix[c][pos[0] * in.cols + pos[1]] * scale;
     v /= stepsize;
@@ -45,6 +48,9 @@ void blk::quantize(cv::Mat &in, int c, float scale) {
 }
 
 void blk::dequantize(cv::Mat &in, int c, float scale) {
+  if (scale < 0.0) {
+    return;
+  }
   in.forEach<float>([&](float &v, const int *pos) -> void {
     float stepsize = blk::qmatrix[c][pos[0] * in.cols + pos[1]] * scale;
     v *= stepsize;
