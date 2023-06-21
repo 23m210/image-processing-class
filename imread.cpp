@@ -2,6 +2,8 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
+#include <opencv2/quality/qualitymse.hpp>
+#include <opencv2/quality/qualitypsnr.hpp>
 #include <vector>
 
 #include "mytools.hpp"
@@ -69,8 +71,14 @@ int main(int argc, char *argv[]) {
 
   cv::cvtColor(image, image, cv::COLOR_YCrCb2BGR);
 
-  // PSNR計算を行う
-  //
+  cv::qualitypsnr(image, image);
+  int i, mse, Io, Ic;
+  int M, N;
+
+  i = 10.0 * log10((255 * 255) / mse);  // PSNR計算を行う
+
+  mse = 1 / M * N * (Io - Ic);
+
   // OpenCv quality psnr 検索
 
   cv::imshow("image", image);
