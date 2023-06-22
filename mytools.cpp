@@ -1,4 +1,6 @@
 #include "mytools.hpp"
+#include
+#include <opencv2/quality/qualitymse.hpp>
 
 void bgr2ycrcb(cv::Mat &image) {
   const int WIDTH = image.cols;
@@ -36,40 +38,75 @@ void blk::mozaic(cv::Mat &in, int p0, float p1) {
   // }
 }
 
-void blk::quantize(cv::Mat &in, int c, float scale) {
+void blk::quantize(cv::Mat &in, int *qtable) {
   if (scale < 0.0) {
     return;
   }
-  in.forEach<float>([&](float &v, const int *pos) -> void {
-    float stepsize = blk::qmatrix[c][pos[0] * in.cols + pos[1]] * scale;
-    v /= stepsize;
-    v = roundf(v);
-  });
-}
+  // in.forEach<float>([&](float &v, const int *pos) -> void {
+  // v /= qtable[pos[0] * in.cols + pos[1]];
+  // v = roundf(v);
+  //});
+  //}
 
-void blk::dequantize(cv::Mat &in, int c, float scale) {
-  if (scale < 0.0) {
-    return;
+  void blk::dequantize(cv::Mat & in, int c, float scale) {
+    in.forEach<float>([&](float &v, const int *pos) -> void {
+      v *= qtable[pos[0] * in.cols + pos[1]];
+    });
   }
-  in.forEach<float>([&](float &v, const int *pos) -> void {
-    float stepsize = blk::qmatrix[c][pos[0] * in.cols + pos[1]] * scale;
-    v *= stepsize;
-    v = roundf(v);
-  });
-}
 
-void blk::dct2(cv::Mat &in, int p0, float p1) { cv::dct(in, in); }
+  void blk::dct2(cv::Mat & in, int p) { cv::dct(in, in); }
 
-void blk::idct2(cv::Mat &in, int p0, float p1) { cv::idct(in, in); }
+  void blk::idct2(cv::Mat & in, int p) { cv::idct(in, in); }
 
-void blkproc(cv::Mat &in, std::function<void(cv::Mat &, int, float)> func,
-             int p0, float p1) {
-  for (int y = 0; y < in.rows; y += BSIZE) {
-    for (int x = 0; x < in.cols; x += BSIZE) {
-      cv::Mat blk_in = in(cv::Rect(x, y, BSIZE, BSIZE)).clone();
-      cv::Mat blk_out = in(cv::Rect(x, y, BSIZE, BSIZE));
-      func(blk_in, p0, p1);
-      blk_in.convertTo(blk_out, blk_out.type());
+  void blkproc(cv::Mat & in, std::function<void(cv::Mat &, int, float)> func,
+               int *p) {
+    for (int y = 0; y < in.rows; y += BSIZE) {
+      for (int x = 0; x < in.cols; x += BSIZE) {
+        cv::Mat blk_in = in(cv::Rect(x, y, BSIZE, BSIZE)).clone();
+        cv::Mat blk_out = in(cv::Rect(x, y, BSIZE, BSIZE));
+        func(blk_in, p);
+        blk_in.convertTo(blk_out, blk_out.type());
+      }
     }
+  }
+
+  void create_qtable() {
+    for (int i = 0; i < 60; ++i) {
+      printf("%d", (int)p[scan[i]]);
+    }
+    stepsize = floor()
+
+        if (stepsize < 1.0) {
+      stepsize = 1;
+    }
+    if (stepsize > 255) {
+      stepsize = 255;
+    }
+    qtable[i] = stepsize;
+  }
+}
+
+void EncodeBlock(cv::MAT &in, int ac, int &prev_dc) {
+  float *p = (float *)in.data;
+  // DC
+  int diff = p[0] - prev_dc;
+  prev_dc = p[0];
+  // EncodeDC with
+
+  int run = 0;
+  // AC
+  for (int i = 0; i < 64; ++1) {
+    int ac = p[scan[i]];
+    if (ac == 0) {
+      run++;
+    } else {
+      while (run > 15) {
+        run -= 16;
+      }
+      run = 0;
+    }
+  }
+  if (run) {
+    // Encode EDB with huffman
   }
 }

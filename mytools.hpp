@@ -6,8 +6,9 @@
 
 void bgr2ycrcb(cv::Mat &image);
 
-void blkproc(cv::Mat &in, std::function<void(cv::Mat &, int, float)>, int = 0,
-             float = 0.0F);
+void blkproc(cv::Mat &in, std::function<void(cv::Mat &, int *, float)>,
+             int *= nullptr);
+void mypsnr() void create_qtable(int c =) {}
 
 namespace blk {
 constexpr float qmatrix[3][64] = {
@@ -23,9 +24,9 @@ constexpr float qmatrix[3][64] = {
      24, 26, 56, 99, 99, 99, 99, 99, 47, 66, 99, 99, 99, 99, 99, 99,
      99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99,
      99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99}};
-void mozaic(cv::Mat &in, int p0, float p1);
-void dct2(cv::Mat &in, int p0, float p1);
-void idct2(cv::Mat &in, int p0, float p1);
-void quantize(cv::Mat &in, int p0, float p1);
-void dequantize(cv::Mat &in, int p0, float p1);
+
+void dct2(cv::Mat &, int *= nullptr);
+void idct2(cv::Mat &, int *= nullptr);
+void quantize(cv::Mat &, int *= nullptr);
+void dequantize(cv::Mat &, int *= nullptr);
 }  // namespace blk
