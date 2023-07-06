@@ -2,13 +2,17 @@
 #include <functional>
 #include <opencv2/core.hpp>
 
+#include "bitstream.hpp"
 #define BSIZE 8
 
 void bgr2ycrcb(cv::Mat &image);
 
-void blkproc(cv::Mat &in, std::function<void(cv::Mat &, int *, float)>,
-             int *= nullptr);
-void mypsnr() void create_qtable(int c =) {}
+void blkproc(cv::Mat &, std::function<void(cv::Mat &, int *)>, int * = nullptr);
+
+void myPSNR(cv::Mat &, cv::Mat &);
+void create_qtable(int, float, int *);
+
+void Encode_MCUs(std::vector<cv::Mat> &, bitstream &);
 
 namespace blk {
 constexpr float qmatrix[3][64] = {
@@ -25,8 +29,8 @@ constexpr float qmatrix[3][64] = {
      99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99,
      99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99}};
 
-void dct2(cv::Mat &, int *= nullptr);
-void idct2(cv::Mat &, int *= nullptr);
-void quantize(cv::Mat &, int *= nullptr);
-void dequantize(cv::Mat &, int *= nullptr);
+void dct2(cv::Mat &, int * = nullptr);
+void idct2(cv::Mat &, int * = nullptr);
+void quantize(cv::Mat &, int * = nullptr);
+void dequantize(cv::Mat &, int * = nullptr);
 }  // namespace blk
