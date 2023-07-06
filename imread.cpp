@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
   create_qtable(1, scale, qtable_C);
 
   bitstream enc;
-  int YCCtype = (image.channels() == 3) ? YCC::YUV420 : YCC::GRAY;
+  int YCCtypes = (image.channels() == 3) ? YCC::YUV420 : YCC::GRAY;
   create_mainheader(image.cols, image.rows, image.channels(), qtable_C,
                     qtable_L, YCC::YUV420, enc);
 
@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
     blkproc(buf[c], blk::dct2);
     blkproc(buf[c], blk::quantize, qtable);
   }
-  Encode_MCUs(buf, int YCCtype);
+  Encode_MCUs(buf, );
   const std::vector<uint8_t> codestream = enc.finalize();
   printf("codestream size = %lld\n", codestream.size());
 
