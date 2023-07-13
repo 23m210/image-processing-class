@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
     blkproc(buf[c], blk::dct2);
     blkproc(buf[c], blk::quantize, qtable);
   }
-  Encode_MCUs(buf, enc, YCCtypes);
+  Encode_MCUs(buf, enc, YCCtypes);  // エントロピー符号化
   auto stop = std::chrono::high_resolution_clock::now();
   duration +=
       std::chrono::duration_cast<std::chrono::microseconds>(stop - start)
