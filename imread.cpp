@@ -1,3 +1,4 @@
+#include <chrono>
 #include <cstdio>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
@@ -46,6 +47,8 @@ int main(int argc, char *argv[]) {
   create_mainheader(image.cols, image.rows, image.channels(), qtable_C,
                     qtable_L, YCC::YUV420, enc);
 
+  auto start = std::chrono::high_resolution_clock::now();
+  long long duration = 0;
   if (image.channels() == 3) bgr2ycrcb(image);
   std::vector<cv::Mat> ycrcb;
   std::vector<cv::Mat> buf(image.channels());
@@ -65,7 +68,12 @@ int main(int argc, char *argv[]) {
     blkproc(buf[c], blk::dct2);
     blkproc(buf[c], blk::quantize, qtable);
   }
-  Encode_MCUs(buf, );
+  Encode_MCUs(buf, enc, YCCtypes);
+  auto stop = std::chrono::high_resolution_clock::now();
+  duration +=
+      std::chrono::duration_cast<std::chrono::microseconds>(stop - start)
+          .count();
+  printf("Elapsed time: %f [ms]\n", duration / 1000.0);
   const std::vector<uint8_t> codestream = enc.finalize();
   printf("codestream size = %lld\n", codestream.size());
 
@@ -100,5 +108,5 @@ int main(int argc, char *argv[]) {
 
   return EXIT_SUCCESS;
 }
-// C言語
-// プロファイラー
+
+// 課題1は5回計算を行って平均を求める。
