@@ -143,6 +143,7 @@ void EncodeBlock(cv::Mat &in, int c, int &prev_dc, bitstream &enc) {
   }
 }
 
+// Entropy decode
 void Encode_MCUs(std::vector<cv::Mat> &buf, bitstream &enc, int YCCtypes) {
   const int nc = buf.size();
   const int height = buf[0].rows;
